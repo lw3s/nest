@@ -4,7 +4,8 @@ project(dsa-lib)
 find_package(GTest REQUIRED)
 
 set(SOURCES
-    main.cpp)
+    main.cpp
+    list.cpp)
 list(TRANSFORM SOURCES PREPEND tests/)
 
 add_executable(test ${SOURCES})
