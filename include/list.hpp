@@ -94,34 +94,21 @@ public:
     iterator back() { return iterator(_back); }
     const_iterator back() const { return const_iterator(_back); }
 
-    T operator[](int pos) {
-        if (pos < 0) pos = _length + pos;
+    T& operator[](int pos) {
+        if (pos < 0) pos += _length;
         if (!(0 <= pos < _length)) throw ListOutOfBounds();
         if (pos >= _length / 2) {
             auto it = back();
             for (size_t _ = 0; _ < _length - pos - 1; ++_) --it;
-            return *it;
+            return it.node()->val;
         } else {
             auto it = begin();
             for (size_t _ = 0; _ < pos; ++_) ++it;
-            return *it;
-        }
-    }
-    void set(int pos, T val) {
-        if (pos < 0) pos = _length + pos;
-        if (!(0 <= pos < _length)) throw ListOutOfBounds();
-        if (pos >= _length / 2) {
-            auto it = back();
-            for (size_t _ = 0; _ < _length - pos - 1; ++_) --it;
-            it.node()->val = val;
-        } else {
-            auto it = begin();
-            for (size_t _ = 0; _ < pos; ++_) ++it;
-            it.node()->val = val;
+            return it.node()->val;
         }
     }
     void insert(int pos, T val) {
-        if (pos < 0) pos = _length + pos + 1;
+        if (pos < 0) pos += _length + 1;
         if (!(0 <= pos && pos <= _length)) throw ListOutOfBounds();
         
         ListNode<T>* inserted = new ListNode<T>(val);
@@ -153,7 +140,7 @@ public:
         ++_length;
     }
     void del(int pos) { 
-        if (pos < 0) pos = _length + pos;
+        if (pos < 0) pos += _length;
         if (!(0 <= pos < _length)) throw ListOutOfBounds();
     
         if (pos == 0) {
@@ -182,7 +169,7 @@ public:
         end:
         --_length;
     }
-    std::vector<size_t> find_vals(auto val) {
+    std::vector<size_t> find_vals(T val) {
         std::vector<size_t> its;
         size_t index = 0;
         for (auto it : *this) {
