@@ -41,16 +41,18 @@ TEST_F(LinkedListTest, Conversion) {
     EXPECT_TRUE(ls == from_func);
 }
 
+TEST_F(LinkedListTest, Indexing) {
+    ls[17] = 3;
+    EXPECT_EQ(ls[5], 6);
+    EXPECT_EQ(ls[-3], 3);
+}
+
 TEST_F(LinkedListTest, Edit) {
     // Delete, insert, pop, and push like your life depends on it. Hit every possibility.
 }
 
 TEST_F(LinkedListTest, FindAndDel) {
     // find_vals(), del_vals()
-}
-
-TEST_F(LinkedListTest, Indexing) {
-    // get values from the list and set them with the [] operator.
 }
 
 TEST_F(LinkedListTest, ApplyAndReduce) {
