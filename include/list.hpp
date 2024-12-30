@@ -187,36 +187,29 @@ public:
         return its;
     }
     void del_vals(T val) {
-        if (!empty()) {
-            // Delete from the front
-            while (_begin->val == val && _begin != _back) {
-                ListNode<T>* newBegin = _begin->next();
+        if (empty()) return;
+        while (_begin->val == val && _begin != _back) {
+            _begin = _begin->next();
+            delete _begin->prev();
+            --_length;
+        }
+        while (_back->val == val && _begin != _back) {
+            _back = _back->prev();
+            delete _back->next();
+            --_length;
+        }
+        if (_begin == _back) {
+            if (_begin->val == val) {
                 delete _begin;
-                _begin = newBegin;
-                --_length;
-            }
-    
-            auto* p = _begin;
-            if (_begin != _back) {
-                // Normal deletion from interior of list
-                while (p->next() != _back) {
-                    if (p->next()->val == val) {
-                        delete p->next();
-                        --_length;
-                    } else {
-                        p = p->next();
-                    }
-                }
-                // Deleting the last item
-                if (_back->val == val) {
-                    delete p->next();
-                    _back = p;
-                    --_length;
-                }
-            } else if (_begin->val == val) {
-                // Deal with the case where we deleted the whole list
                 _begin = _back = nullptr;
                 _length = 0;
+            }
+            return;
+        }
+        for (auto i = begin(); i != back(); ++i) {
+            for (;*i == val; ++i) {
+                delete i.node();
+                --_length;
             }
         }
     }

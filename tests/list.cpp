@@ -51,11 +51,15 @@ TEST_F(LinkedListTest, Edit) { // Lots of moving parts here, I want path coverag
     ls.del(-2);
     ls.del(-18);
     lstr << ls;
-    ASSERT_TRUE(lstr.str() == "{20, 5, 3, 23, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 43, 17, 22, 18, 1}");
+    EXPECT_EQ(lstr.str(), "{20, 5, 3, 23, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 43, 17, 22, 18, 1}");
 }
 
 TEST_F(LinkedListTest, FindAndDel) {
-    // find_vals(), del_vals()
+    List<int> newls([](size_t n) -> int { return (n + 1) % 4; }, 20);
+    EXPECT_EQ(newls.find_vals(3), std::vector<size_t>({2, 6, 10, 14, 18}));
+    newls.del_vals(2);
+    lstr << newls;
+    EXPECT_EQ(lstr.str(), "{1, 3, 0, 1, 3, 0, 1, 3, 0, 1, 3, 0, 1, 3, 0}");
 }
 
 TEST_F(LinkedListTest, ApplyAndReduce) {
