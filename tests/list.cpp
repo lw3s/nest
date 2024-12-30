@@ -1,5 +1,6 @@
 #include <fstream>
 #include <cstdlib>
+#include <vector>
 
 #include <gtest/gtest.h>
 
@@ -30,7 +31,14 @@ TEST_F(LinkedListTest, OStream) {
 }
 
 TEST_F(LinkedListTest, Conversion) {
-    // Make new lists from vectors, static arrays, lambda generator
+    int static_ints[20] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+    List<int> from_static = List(static_ints, 20);
+    std::vector<int> vector_ints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+    List<int> from_vector = List(vector_ints);
+    List<int> from_func = List<int>([](size_t n) -> int { return n + 1; }, 20);
+    EXPECT_TRUE(ls == from_static); // EXPECT_EQ doesn't like operator== being defined within the class
+    EXPECT_TRUE(ls == from_vector);
+    EXPECT_TRUE(ls == from_func);
 }
 
 TEST_F(LinkedListTest, Edit) {

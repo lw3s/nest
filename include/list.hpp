@@ -7,6 +7,7 @@
 #include <cstddef>
 #include <stdexcept>
 #include <vector>
+#include <functional>
 
 class ListOutOfBounds : public std::range_error {
 public:
@@ -67,8 +68,13 @@ public:
         }
     }
     List(const T* list, size_t length) : _length(0), _begin(nullptr), _back(nullptr) {
-        for (int i = 0; i < length; ++i) {
+        for (size_t i = 0; i < length; ++i) {
             pushr(list[i]);
+        }
+    }
+    List(std::function<T(size_t)> func, size_t length): _length(0), _begin(nullptr), _back(nullptr) {
+        for (size_t i = 0; i < length; ++i) {
+            pushr(func(i));
         }
     }
     ~List() { clear(); }
