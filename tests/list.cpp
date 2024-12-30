@@ -1,6 +1,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <vector>
+#include <iostream>
 
 #include <gtest/gtest.h>
 
@@ -10,6 +11,7 @@
 class LinkedListTest : public testing::Test {
 protected:
     List<int> ls;
+    std::ostringstream lstr;
 public:
     LinkedListTest() {
         for (int i = 1; i <= 20; ++i) {
@@ -47,8 +49,21 @@ TEST_F(LinkedListTest, Indexing) {
     EXPECT_EQ(ls[-3], 3);
 }
 
-TEST_F(LinkedListTest, Edit) {
-    // Delete, insert, pop, and push like your life depends on it. Hit every possibility.
+TEST_F(LinkedListTest, Edit) { // Lots of moving parts here, I want path coverage.
+    ls.popl();
+    ls.popr();
+    ls.pushl(20);
+    ls.pushr(1);
+    ls.insert(2, 5);
+    ls.insert(-17, 23);
+    ls.insert(18, 43);
+    ls.insert(-4, 22);
+    ls.del(1);
+    ls.del(16);
+    ls.del(-2);
+    ls.del(-18);
+    lstr << ls;
+    ASSERT_TRUE(lstr.str() == "{20, 5, 3, 23, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 43, 17, 22, 18, 1}");
 }
 
 TEST_F(LinkedListTest, FindAndDel) {

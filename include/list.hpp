@@ -102,7 +102,7 @@ public:
 
     T& operator[](int pos) {
         if (pos < 0) pos += _length;
-        if (!(0 <= pos < _length)) throw ListOutOfBounds();
+        if (!(0 <= pos && pos < _length)) throw ListOutOfBounds();
         if (pos >= _length / 2) {
             auto it = back();
             for (size_t _ = 0; _ < _length - pos - 1; ++_) --it;
@@ -139,7 +139,7 @@ public:
             it.node()->insert_right(inserted);
         } else {
             auto it = back();
-            for (auto _ = 0; _ < _length - pos + 1; ++_) --it;
+            for (auto _ = 0; _ < _length - pos; ++_) --it;
             it.node()->insert_right(inserted);
         }
         end:
@@ -147,7 +147,7 @@ public:
     }
     void del(int pos) { 
         if (pos < 0) pos += _length;
-        if (!(0 <= pos < _length)) throw ListOutOfBounds();
+        if (!(0 <= pos && pos < _length)) throw ListOutOfBounds();
     
         if (pos == 0) {
             _begin = _begin->next();
