@@ -237,15 +237,15 @@ public:
         }
         return false;
     }
-    T reduce(T (*rfunc)(T, T), T start = T()) {
+    T reduce(std::function<T(T, T)> fn, T start = T()) {
         for (auto i : *this) {
-            start = rfunc(start, i);
+            start = fn(start, i);
         }
         return start;
     }
-    void apply(T (*afunc)(T)) {
+    void apply(std::function<T(T)> fn) {
         for (auto i = begin(); i != nullptr; ++i) {
-            i.node()->val = afunc(i.node()->val);
+            i.node()->val = fn(i.node()->val);
         }
     }
 };

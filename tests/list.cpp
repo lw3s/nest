@@ -63,7 +63,13 @@ TEST_F(LinkedListTest, FindAndDel) {
 }
 
 TEST_F(LinkedListTest, ApplyAndReduce) {
-    // self-explanatory
+    for (int _ = 0; _ < 10; ++_) ls.popr();
+    EXPECT_EQ(ls.reduce([](int a, int b) -> int { return a + b; }), 55);
+    EXPECT_EQ(ls.reduce([](int a, int b) -> int { return a * b; }), 0);
+    EXPECT_EQ(ls.reduce([](int a, int b) -> int { return a * b; }, 1), 3628800);
+    ls.apply([](int n) -> int { return n * n; });
+    lstr << ls;
+    EXPECT_EQ(lstr.str(), "{1, 4, 9, 16, 25, 36, 49, 64, 81, 100}");
 }
 
 TEST_F(LinkedListTest, Templating) {
