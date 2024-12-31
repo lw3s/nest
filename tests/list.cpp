@@ -10,13 +10,7 @@
 
 class LinkedListTest : public testing::Test {
 protected:
-    List<int> ls;
-public:
-    LinkedListTest() {
-        for (int i = 1; i <= 20; ++i) {
-            ls.pushr(i);
-        }
-    }
+    List<int> ls = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
 };
 
 TEST_F(LinkedListTest, Conversion) {

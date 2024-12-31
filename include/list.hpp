@@ -9,6 +9,7 @@
 #include <vector>
 #include <functional>
 #include <string>
+#include <initializer_list>
 
 class ListOutOfBounds : public std::range_error {
 public:
@@ -58,6 +59,11 @@ public:
     };
 
     List() : _length(0), _begin(nullptr), _back(nullptr) {};
+    List(const std::initializer_list<T> il) {
+        for (T i : il) {
+            pushr(i);
+        }
+    }
     List(const List<T>& list) : _length(0), _begin(nullptr), _back(nullptr) {
         for (auto it : list) {
             pushr(it);
