@@ -11,7 +11,6 @@
 class LinkedListTest : public testing::Test {
 protected:
     List<int> ls;
-    std::ostringstream lstr;
 public:
     LinkedListTest() {
         for (int i = 1; i <= 20; ++i) {
@@ -50,16 +49,14 @@ TEST_F(LinkedListTest, Edit) { // Lots of moving parts here, I want path coverag
     ls.del(16);
     ls.del(-2);
     ls.del(-18);
-    lstr << ls;
-    EXPECT_EQ(lstr.str(), "{20, 5, 3, 23, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 43, 17, 22, 18, 1}");
+    EXPECT_EQ(ls.string(), "{20, 5, 3, 23, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 43, 17, 22, 18, 1}");
 }
 
 TEST_F(LinkedListTest, FindAndDel) {
     List<int> newls([](size_t n) -> int { return (n + 1) % 4; }, 20);
     EXPECT_EQ(newls.find_vals(3), std::vector<size_t>({2, 6, 10, 14, 18}));
     newls.del_vals(2);
-    lstr << newls;
-    EXPECT_EQ(lstr.str(), "{1, 3, 0, 1, 3, 0, 1, 3, 0, 1, 3, 0, 1, 3, 0}");
+    EXPECT_EQ(newls.string(), "{1, 3, 0, 1, 3, 0, 1, 3, 0, 1, 3, 0, 1, 3, 0}");
 }
 
 TEST_F(LinkedListTest, ApplyAndReduce) {
@@ -68,6 +65,5 @@ TEST_F(LinkedListTest, ApplyAndReduce) {
     EXPECT_EQ(ls.reduce([](int a, int b) -> int { return a * b; }), 0);
     EXPECT_EQ(ls.reduce([](int a, int b) -> int { return a * b; }, 1), 3628800);
     ls.apply([](int n) -> int { return n * n; });
-    lstr << ls;
-    EXPECT_EQ(lstr.str(), "{1, 4, 9, 16, 25, 36, 49, 64, 81, 100}");
+    EXPECT_EQ(ls.string(), "{1, 4, 9, 16, 25, 36, 49, 64, 81, 100}");
 }

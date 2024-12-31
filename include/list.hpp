@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <vector>
 #include <functional>
+#include <string>
 
 class ListOutOfBounds : public std::range_error {
 public:
@@ -78,6 +79,10 @@ public:
         }
     }
     ~List() { clear(); }
+
+    std::string string() {
+        return (std::ostringstream() << *this).str();
+    }
     
     size_t length() const { return _length; }
     size_t size() const { return _length; }
