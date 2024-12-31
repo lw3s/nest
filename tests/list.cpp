@@ -71,7 +71,3 @@ TEST_F(LinkedListTest, ApplyAndReduce) {
     lstr << ls;
     EXPECT_EQ(lstr.str(), "{1, 4, 9, 16, 25, 36, 49, 64, 81, 100}");
 }
-
-TEST_F(LinkedListTest, Templating) {
-    // do a List<double> and List<std::string> and cherry pick some fiddling from the other tests to do with them
-}
