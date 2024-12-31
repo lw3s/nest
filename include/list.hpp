@@ -58,8 +58,8 @@ public:
         }
     };
 
-    List() : _length(0), _begin(nullptr), _back(nullptr) {};
-    List(const std::initializer_list<T> il) {
+    List() : _length(0), _begin(nullptr), _back(nullptr) {}
+    List(const std::initializer_list<T> il): _length(0), _begin(nullptr), _back(nullptr) {
         for (T i : il) {
             pushr(i);
         }
@@ -69,7 +69,7 @@ public:
             pushr(it);
         }
     }
-    List(const std::vector<T>& list) : _length(0), _begin(nullptr), _back(nullptr) {
+    List(const std::vector<T> list) : _length(0), _begin(nullptr), _back(nullptr) {
         for (auto it : list) {
             pushr(it);
         }
@@ -79,9 +79,9 @@ public:
             pushr(list[i]);
         }
     }
-    List(std::function<T(size_t)> func, size_t length): _length(0), _begin(nullptr), _back(nullptr) {
+    List(std::function<T(size_t)> fn, size_t length): _length(0), _begin(nullptr), _back(nullptr) {
         for (size_t i = 0; i < length; ++i) {
-            pushr(func(i));
+            pushr(fn(i));
         }
     }
     ~List() { clear(); }
@@ -92,7 +92,7 @@ public:
     
     size_t length() const { return _length; }
     size_t size() const { return _length; }
-    bool empty() const { return _length == 0; }
+    bool is_empty() const { return _length == 0; }
     void clear() {
         for (auto* p = _begin; p != nullptr;) {
             auto* p_next = p->next();
@@ -114,17 +114,17 @@ public:
     T& operator[](int pos) {
         if (pos < 0) pos += _length;
         if (!(0 <= pos && pos < _length)) throw ListOutOfBounds();
-        if (pos >= _length / 2) {
-            auto it = back();
-            for (size_t _ = 0; _ < _length - pos - 1; ++_) --it;
-            return it.node()->val;
-        } else {
+        if (pos < _length / 2) {
             auto it = begin();
             for (size_t _ = 0; _ < pos; ++_) ++it;
             return it.node()->val;
+        } else {
+            auto it = back();
+            for (size_t _ = 0; _ < _length - pos - 1; ++_) --it;
+            return it.node()->val;
         }
     }
-    void insert(int pos, T val) {
+    void insert(int pos, const T val) {
         if (pos < 0) pos += _length + 1;
         if (!(0 <= pos && pos <= _length)) throw ListOutOfBounds();
         
@@ -170,23 +170,23 @@ public:
             goto end;
         }
     
-        if (pos >= _length / 2) {
-            auto it = back();
-            for (size_t _ = 0; _ < _length - pos - 1; ++_) {
-                --it;
-            }
-            delete it.node();
-        } else {
+        if (pos < _length / 2) {
             auto it = begin();
             for (size_t _ = 0; _ < pos; ++_) {
                 ++it;
+            }
+            delete it.node();
+        } else {
+            auto it = back();
+            for (size_t _ = 0; _ < _length - pos - 1; ++_) {
+                --it;
             }
             delete it.node();
         }
         end:
         --_length;
     }
-    std::vector<size_t> find_vals(T val) {
+    std::vector<size_t> find_vals(const T val) {
         std::vector<size_t> its;
         size_t index = 0;
         for (auto it : *this) {
@@ -197,8 +197,8 @@ public:
         }
         return its;
     }
-    void del_vals(T val) {
-        if (empty()) return;
+    void del_vals(const T val) {
+        if (is_empty()) return;
         while (_begin->val == val && _begin != _back) {
             _begin = _begin->next();
             delete _begin->prev();
@@ -225,8 +225,8 @@ public:
         }
     }
     
-    void pushl(T val) { insert(0, val); }
-    void pushr(T val) { insert(-1, val); }
+    void pushl(const T val) { insert(0, val); }
+    void pushr(const T val) { insert(-1, val); }
     void popl() { del(0); }
     void popr() { del(-1); }
     
@@ -248,13 +248,13 @@ public:
         }
         return false;
     }
-    T reduce(std::function<T(T, T)> fn, T start = T()) {
+    T reduce(const std::function<T(T, T)> fn, T start = T()) {
         for (auto i : *this) {
             start = fn(start, i);
         }
         return start;
     }
-    void apply(std::function<T(T)> fn) {
+    void apply(const std::function<T(T)> fn) {
         for (auto i = begin(); i != nullptr; ++i) {
             i.node()->val = fn(i.node()->val);
         }
@@ -264,7 +264,7 @@ public:
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const List<T>& rhs) {
     os << "{";
-    if (!rhs.empty()) {
+    if (!rhs.is_empty()) {
         for (auto i = rhs.begin(); i != rhs.back(); ++i) {
             os << *i << ", ";
         }
