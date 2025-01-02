@@ -4,7 +4,8 @@ project(dsa-lib)
 find_package(GTest REQUIRED)
 include_directories(include)
 
-set(file_names)
+set(file_names
+    list)
 
 set(src_names ${file_names})
 list(TRANSFORM src_names PREPEND tests/)
