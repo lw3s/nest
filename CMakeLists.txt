@@ -2,11 +2,21 @@ cmake_minimum_required(VERSION 3.31)
 project(dsa-lib)
 
 find_package(GTest REQUIRED)
+include_directories(include)
 
-set(SOURCES
-    main.cpp)
-list(TRANSFORM SOURCES PREPEND tests/)
+set(file_names)
 
-add_executable(test ${SOURCES})
-target_link_libraries(test PRIVATE gtest::gtest)
-target_include_directories(test PRIVATE include)
+set(src_names ${file_names})
+list(TRANSFORM src_names PREPEND tests/)
+list(TRANSFORM src_names APPEND .cpp)
+
+set(exec_names ${file_names})
+list(TRANSFORM exec_names PREPEND test)
+
+foreach(src exec IN ZIP_LISTS src_names exec_names)
+    add_executable(${exec} tests/main.cpp ${src})
+    target_link_libraries(${exec} PRIVATE gtest::gtest)
+endforeach()
+
+add_executable(testall tests/main.cpp ${src_names})
+target_link_libraries(testall PRIVATE gtest::gtest)
