@@ -1,5 +1,3 @@
-#include <exception>
-
 #include <gtest/gtest.h>
 
 #include "graph.hpp"
@@ -14,3 +12,5 @@ TEST(GraphTest, InsertionAndDeletion) {
     g.update_edge(1, 2, 5);
     EXPECT_DOUBLE_EQ(g.weight(1, 2), 5);
 }
+
+// The rest are algorithms (Dijkstra, Prim, etc): the tests should be in this file; the algorithms should be functions (not methods) in include/graph.hpp

@@ -4,21 +4,20 @@
 #include <exception>
 #include <unordered_map>
 #include <cstdlib>
-#include <iostream>
+#include <sstream>
 #include <string>
 
-class NonexistentNode : public std::exception {
-    std::string _what;
+class NonexistentNode : public std::range_error {
 public:
-    NonexistentNode(const auto val) : _what((std::ostringstream() << "Node " << val << " does not exist.").str()) {}
-    std::string what() { return _what; }
+    NonexistentNode(const auto val) : std::range_error((std::ostringstream() << "Node " << val << " does not exist.").str()) {}
 };
-class NonexistentEdge : public std::exception {
-    std::string _what;
+
+class NonexistentEdge : public std::range_error {
 public:
-    NonexistentEdge(const auto begin, const auto end) : _what((std::ostringstream() << "The edge from " << begin << " to " << end << " does not exist.").str()) {}
-    std::string what() { return _what; }
+    NonexistentEdge(const auto begin, const auto end) : std::range_error((std::ostringstream() << "The edge from " << begin << " to " << end << " does not exist.").str()) {}
 };
+
+
 template <typename T>
 class Graph {
 protected:
