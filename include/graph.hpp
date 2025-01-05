@@ -6,6 +6,8 @@
 #include <cstdlib>
 #include <sstream>
 #include <string>
+#include <utility>
+#include <vector>
 
 class NonexistentNode : public std::range_error {
 public:
@@ -21,10 +23,25 @@ public:
 template <typename T>
 class Graph {
 protected:
-    std::unordered_map<T, std::unordered_map<T, double>> _adjacency; // {begin, {end, weight}}
+    std::unordered_map<T, std::unordered_map<T, double>> _adjacency; // begin, {{end, weight}}
 public:
-
     size_t size() { return _adjacency.size(); }
+    std::vector<T> nodes() {
+        std::vector<T> ret;
+        for (auto key_value : _adjacency) {
+            ret.push_back(key_value.first);
+        }
+        return ret;
+    }
+    std::vector<std::tuple<T, T, double>> edges() { // begin, end, weight -- different because we're representing as individual edges rather than the whole graph
+        std::vector<std::tuple<T, T, double>> ret;
+        for (auto begin_ends : _adjacency) {
+            for (auto end_weight : begin_ends.second)   {
+                ret.push_back({begin_ends.first, end_weight.first, end_weight.second});
+            }
+        }
+        return ret;
+    }
     void clear_node(T node) { _adjacency[node] = {}; }
     void update_edge(T begin, T end, double weight) {
         if (!_adjacency.contains(begin)) throw NonexistentNode(begin);
