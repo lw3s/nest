@@ -14,8 +14,9 @@ TEST_F(SearchTest, Binary) {
     EXPECT_EQ(search::binary(arr, 19), 18);
 }
 
-TEST_F(SearchTest, Bintree)  {
-
+TEST_F(SearchTest, Tree)  {
+    std::vector<int> tree = {7, 3, 11, 1, 5, 9, 13, 0, 2, 4, 6, 8, 10, 12, 14};
+    EXPECT_EQ(search::tree(tree, 8), 11);
 }
 
 TEST_F(SearchTest, Interpolation) {
