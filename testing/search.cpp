@@ -20,5 +20,7 @@ TEST_F(SearchTest, Tree)  {
 }
 
 TEST_F(SearchTest, Interpolation) {
-
+    EXPECT_EQ(search::interpolation(arr, 10), 9);
+    EXPECT_EQ(search::interpolation(arr, 2), 1);
+    EXPECT_EQ(search::interpolation(arr, 19), 18);
 }

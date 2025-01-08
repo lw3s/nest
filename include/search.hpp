@@ -45,7 +45,25 @@ size_t tree(std::vector<int> arr, int val) { // see docs
 }
 
 size_t interpolation(std::vector<int> arr, int val) {
-    return 0;
+    size_t l = 0, r = arr.size() - 1, m;
+    if (arr[l] == val) return l;
+    if (arr[r] == val) return r;
+    while (r - l >= 2) {
+        m = ((val - arr[l]) * (r - l) / (arr[r] - arr[l])) + l;
+        if (!(l < m < r)) break;
+        if (val == arr[m]) return m;
+
+        if (val < arr[m]) r = m;
+        else if (val > arr[m]) l = m;
+    }
+    while (r - l >= 2) {
+        m = (l + r) / 2;
+        if (val == arr[m]) return m;
+
+        if (val < arr[m]) r = m;
+        else if (val > arr[m]) l = m;
+    }
+    throw std::range_error("arr is unsorted or does not countain val");
 }
 
 }
