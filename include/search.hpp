@@ -22,15 +22,7 @@ size_t binary(std::vector<int> arr, int val) {
         if (val < arr[m]) r = m;
         else if (val > arr[m]) l = m;
     }
-    throw std::range_error("arr is unsorted or does not countain val");
-}
-
-size_t left(size_t n) {
-    return n * 2 + 1;
-}
-
-size_t right(size_t n) {
-    return n * 2 + 2;
+    throw std::range_error("arr is unsorted or does not contain val");
 }
 
 size_t tree(std::vector<int> arr, int val) { // see docs
@@ -38,10 +30,10 @@ size_t tree(std::vector<int> arr, int val) { // see docs
     while (pos < arr.size()) {
         if (val == arr[pos]) return pos;
         
-        if (val < arr[pos]) pos = left(pos);
-        else if (val > arr[pos]) pos = right(pos);
+        if (val < arr[pos]) pos = pos * 2 + 1;
+        else if (val > arr[pos]) pos = pos * 2 + 2;
     }
-    throw std::range_error("arr is invalid binary tree or does not countain val");
+    throw std::range_error("arr is invalid binary search tree or does not contain val");
 }
 
 size_t interpolation(std::vector<int> arr, int val) {
@@ -63,15 +55,27 @@ size_t interpolation(std::vector<int> arr, int val) {
         if (val < arr[m]) r = m;
         else if (val > arr[m]) l = m;
     }
-    throw std::range_error("arr is unsorted or does not countain val");
+    throw std::range_error("arr is unsorted or does not contain val");
 }
 
 }
 
 bool is_sorted(std::vector<int> arr) {
+    for (size_t i = 1; i < arr.size(); ++i) {
+        if (arr[i-1] > arr[i]) return false;
+    }
     return true;
 }
 
-bool is_bintree(std::vector<int> arr) {
+bool is_bintree(std::vector<int> arr, size_t root = 0) {
+    size_t left = root * 2 + 1, right = root * 2 + 2;
+    if (right < arr.size()) {
+        if (arr[right] <= arr[root]) return false;
+        if (!is_bintree(arr, right)) return false;
+    }
+    if (left < arr.size()) {
+        if (arr[left] >= arr[root]) return false;
+        if (!is_bintree(arr, left)) return false;
+    }
     return true;
 }
