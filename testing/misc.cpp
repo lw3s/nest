@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "trie.hpp"
+#include "euclid.hpp"
 
 TEST(MiscellaneousTest, Trie) {
     Trie t;
@@ -17,4 +18,10 @@ TEST(MiscellaneousTest, Trie) {
     EXPECT_FALSE(t.contains("a"));
     std::vector<std::string> expected_strs = {"apple", "island", "is", "itinerary", "it", "i"};
     EXPECT_EQ(t.all_strings(), expected_strs);
+}
+
+TEST(MiscellaneousTest, Euclidean) {
+    EXPECT_EQ(gcf(3, 5), 1);
+    EXPECT_EQ(gcf(12, 20), 4);
+    EXPECT_EQ(lcm(12, 20), 60);
 }
