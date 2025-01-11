@@ -1,3 +1,6 @@
+#ifndef TRIE_HPP
+#define TRIE_HPP
+
 #include <vector>
 #include <string>
 #include <cctype>
@@ -64,3 +67,5 @@ public:
         return words;
     }
 };
+
+#endif // TRIE_HPP

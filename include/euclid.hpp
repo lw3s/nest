@@ -1,3 +1,6 @@
+#ifndef EUCLID_HPP
+#define EUCLID_HPP
+
 #include <cmath>
 
 
@@ -15,3 +18,5 @@ int gcf(int a, int b) {
 int lcm(int a, int b) {
     return a * b / gcf(a, b);
 }
+
+#endif // EUCLID_HPP
