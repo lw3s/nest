@@ -1,3 +1,6 @@
+#ifndef SEARCH_HPP
+#define SEARCH_HPP
+
 #include <vector>
 #include <cstdlib>
 #include <stdexcept>
@@ -79,3 +82,5 @@ bool is_bintree(std::vector<int> arr, size_t root = 0) {
     }
     return true;
 }
+
+#endif // SEARCH_HPP

@@ -1,3 +1,6 @@
+#ifndef SORT_HPP
+#define SORT_HPP
+
 #include <vector>
 
 namespace sort{
@@ -19,3 +22,5 @@ void tim(std::vector<int> arr) {
 }
 
 }
+
+#endif // SORT_HPP
