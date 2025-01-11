@@ -2,6 +2,7 @@
 
 #include "trie.hpp"
 #include "euclid.hpp"
+#include "array.hpp"
 
 TEST(MiscellaneousTest, Trie) {
     Trie t;
@@ -24,4 +25,10 @@ TEST(MiscellaneousTest, Euclidean) {
     EXPECT_EQ(gcf(3, 5), 1);
     EXPECT_EQ(gcf(12, 20), 4);
     EXPECT_EQ(lcm(12, 20), 60);
+}
+
+TEST(MiscellaneousTest, Kadane) {
+    std::vector<int> in = {1, -2, 5, -2, 1, 2, -7, 2};
+    std::pair<size_t, size_t> expected = {2, 5};
+    EXPECT_EQ(kadane(in), expected);
 }
