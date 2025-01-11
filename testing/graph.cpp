@@ -28,4 +28,4 @@ TEST(GraphTest, InsertionAndDeletion) {
     EXPECT_EQ(g.edges(), expected_edges);
 }
 
-// The rest are algorithms (Dijkstra, Prim, etc): the tests should be in this file; the algorithms should be functions (not methods) in include/graph.hpp
+// The rest are algorithms (Dijkstra, Prim, etc): the tests should be in this file; the algorithms should be functions in include/graph.hpp
