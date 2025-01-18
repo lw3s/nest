@@ -1,8 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "trie.hpp"
-#include "euclid.hpp"
-#include "array.hpp"
+#include "util.hpp"
 #include "rational.hpp"
 
 TEST(MiscellaneousTest, Trie) {

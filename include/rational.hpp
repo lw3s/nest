@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-#include "euclid.hpp"
+#include "util.hpp"
 
 class Rational {
     int _num; // always positive

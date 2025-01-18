@@ -1,10 +1,27 @@
-#ifndef ARRAY_HPP
-#define ARRAY_HPP
+#ifndef UTIL_HPP
+#define UTIL_HPP
 
 #include <utility>
 #include <cstdlib>
 #include <exception>
 #include <vector>
+#include <cmath>
+
+
+int gcf(int a, int b) {
+    a = std::abs(a); b = std::abs(b);
+    int remainder;
+    while (b != 0) {
+        remainder = a % b;
+        a = b;
+        b = remainder;
+    }
+    return a;
+}
+
+int lcm(int a, int b) {
+    return a * b / gcf(a, b);
+}
 
 template <typename T>
 std::pair<size_t, size_t> kadane(std::vector<T> arr) {
@@ -46,4 +63,4 @@ std::pair<size_t, size_t> kadane(T* arr, size_t length) {
     return start_end;
 }
 
-#endif // ARRAY_HPP
+#endif // UTIL_HPP
