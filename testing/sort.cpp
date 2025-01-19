@@ -16,14 +16,14 @@ TEST_F(SortTest, Radix) {
     sort::radix(unsorted);
 }
 
-TEST_F(SortTest, Shell) {
-    sort::shell(unsorted);
+TEST_F(SortTest, Insertion) {
+    sort::insertion(unsorted);
 }
 
 TEST_F(SortTest, Quick) {
     sort::quick(unsorted);
 }
 
-TEST_F(SortTest, Tim) {
-    sort::tim(unsorted);
+TEST_F(SortTest, Merge) {
+    sort::merge(unsorted);
 }

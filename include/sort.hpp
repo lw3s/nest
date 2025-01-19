@@ -20,18 +20,16 @@ void countingSort(std::vector<int>& arr, int exp) {
         for (int i = n - 1; i >= 0; i--) {
             output[count[(arr[i] / exp) % 10] - 1] = arr[i];
             count[(arr[i] / exp) % 10]--;
-     }
+        }
 
         for (int i = 0; i < n; i++)
             arr[i] = output[i];
-    }
+}
 
 
 namespace sort {
 
-void radix(std::vector<int> arr) {
-// Will add support for more types and out-of-place sorting after these are written, just sticking with vevctor<int>s and in-place to start; same applies to searching
-
+void radix(std::vector<int>& arr) {
     int maxVal = *std::max_element(arr.begin(), arr.end());
 
     for (int exp = 1; maxVal / exp > 0; exp *= 10)
@@ -39,15 +37,15 @@ void radix(std::vector<int> arr) {
 
 }
 
-void insertion(std::vector<int> arr) {
+void insertion(std::vector<int>& arr) {
 
 }
 
-void quick(std::vector<int> arr) {
+void quick(std::vector<int>& arr) {
 
 }
 
-void merge(std::vector<int> arr) {
+void merge(std::vector<int>& arr) {
 
 }
 
