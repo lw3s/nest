@@ -5,7 +5,6 @@ find_package(GTest REQUIRED)
 include_directories(include)
 
 set(file_names
-    list
     graph)
 
 set(src_names ${file_names})
