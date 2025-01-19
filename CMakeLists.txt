@@ -6,7 +6,8 @@ include_directories(include)
 
 set(file_names
     list
-    misc)
+    misc
+    graph)
 
 set(src_names ${file_names})
 list(TRANSFORM src_names PREPEND testing/)
