@@ -68,10 +68,9 @@ void insertion(std::vector<int>& arr) {
 }
 
 void quick(std::vector<int>& arr, int low = 0, int high = -1) {
-    if (high = -1) {
-        high = arr.size() -1;
+    if (high == -1) {
+        high = arr.size() - 1;
     }
-
     if (low < high) {
         int pi = partition(arr, low, high);
         quick(arr, low, pi - 1);
