@@ -1,8 +1,6 @@
 #include <gtest/gtest.h>
 
-
 #include "graph.hpp"
-
 
 std::vector<int> sort(std::vector<int> arr) { // quick-and-dirty selection sort
     for (int i = 0; i < arr.size(); ++i) {
@@ -16,7 +14,6 @@ std::vector<int> sort(std::vector<int> arr) { // quick-and-dirty selection sort
     }
     return arr;
 }
-
 
 TEST(GraphTest, InsertionAndDeletion) {
     Graph<int> g;

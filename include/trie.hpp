@@ -7,7 +7,6 @@
 #include <cstdlib>
 #include <utility>
 
-
 class Trie {
     Trie* _subtries[26];
     bool _is_end;

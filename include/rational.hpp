@@ -52,7 +52,6 @@ Rational operator/(Rational a, Rational b) {
 bool operator==(Rational a, Rational b) {
     return a.sign() == b.sign() && a.num() == b.num() && a.den() == b.den();
 }
-
 bool operator!=(Rational a, Rational b) {
     return a.sign() != b.sign() || a.num() != b.num() || a.den() != b.den();
 }

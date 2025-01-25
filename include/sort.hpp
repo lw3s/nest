@@ -24,6 +24,7 @@ void countingSort(std::vector<int>& arr, int exp) { // For RADIX ---------------
     for (int i = 0; i < n; i++)
         arr[i] = output[i];
 }
+
 int partition(std::vector<int>& arr, int low, int high) { // For QUICK ---------------
     int pivot = arr[high];
     int i = low - 1;
@@ -36,16 +37,19 @@ int partition(std::vector<int>& arr, int low, int high) { // For QUICK ---------
     std::swap(arr[i + 1], arr[high]);
     return i + 1;
 }
+
 void mergeHelp(std::vector<int>& arr, int left, int mid, int right) { // For MERGE ---
     int n1 = mid - left + 1;
     int n2 = right - mid;
 
     std::vector<int> leftArr(n1), rightArr(n2);
 
-    for (int i = 0; i < n1; i++)
+    for (int i = 0; i < n1; i++) {
         leftArr[i] = arr[left + i];
-    for (int j = 0; j < n2; j++)
+    }
+    for (int j = 0; j < n2; j++) {
         rightArr[j] = arr[mid + 1 + j];
+    }
 
     int i = 0, j = 0, k = left;
     while (i < n1 && j < n2) {
@@ -72,22 +76,14 @@ void mergeHelp(std::vector<int>& arr, int left, int mid, int right) { // For MER
     }
 }
 
-
-
-
-
-
-namespace sort{
-
-
-
-
+namespace sort {
 
 void radix(std::vector<int>& arr) {
- int maxVal = *std::max_element(arr.begin(), arr.end());
+    int maxVal = *std::max_element(arr.begin(), arr.end());
 
-     for (int exp = 1; maxVal / exp > 0; exp *= 10)
+    for (int exp = 1; maxVal / exp > 0; exp *= 10) {
         countingSort(arr, exp);
+    }
 
 }
 
@@ -113,7 +109,7 @@ void quick(std::vector<int>& arr, int low = 0, int high = -1) {
         quick(arr, pi + 1, high);
     }
 }
-   
+
 void merge(std::vector<int>& arr, int left = 0, int right = -1) {
     if (right == -1) {
         right = arr.size() - 1;
@@ -130,4 +126,5 @@ void merge(std::vector<int>& arr, int left = 0, int right = -1) {
 }
 
 }
+
 #endif // SORT_HPP

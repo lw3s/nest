@@ -7,7 +7,6 @@
 #include <vector>
 #include <cmath>
 
-
 int gcf(int a, int b) {
     a = std::abs(a); b = std::abs(b);
     int remainder;
