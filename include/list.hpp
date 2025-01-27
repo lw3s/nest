@@ -263,14 +263,14 @@ public:
 
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const List<T>& rhs) {
-    os << "{";
+    os << "{ ";
     if (!rhs.is_empty()) {
         for (auto i = rhs.begin(); i != rhs.back(); ++i) {
             os << *i << ", ";
         }
         os << *rhs.back();
     }
-    os << "}";
+    os << " }";
     return os;
 }
 
