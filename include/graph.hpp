@@ -84,7 +84,52 @@ protected:
         if (!_adjacency[begin].contains(end)) throw NonexistentEdge(begin, end);
         return _adjacency[begin][end];
     }
+    bool is_dag() {
+
+    }
+    bool is_undirected() {
+
+    }
+    bool is_positive() {
+
+    }
+    bool is_connected() {
+
+    }
+    bool has_neg_loop() {
+
+    }
 };
+
+template <typename T>
+std::vector<std::vector<T>> sssp(Graph<T> g, T start, bool is_pos = false) {
+
+}
+
+template <typename T>
+std::vector<T> shortest_path(Graph<T> g, T start, T end, bool is_pos = false) {
+
+}
+
+template <typename T>
+std::vector<std::vector<T>> all_shortest_paths(Graph<T> g) {
+
+}
+
+template <typename T>
+std::vector<T> top_sort(Graph<T> g) {
+
+}
+
+template <typename T>
+Graph<T> mst(Graph<T> g) {
+
+}
+
+template <typename T>
+std::vector<std::vector<T>> scc(Graph<T> g) {
+
+}
 
 template <typename T>
 std::ostream& operator<<(std::ostream& os, Graph<T> g) {
