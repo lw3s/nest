@@ -3,6 +3,7 @@
 
 #include <exception>
 #include <unordered_map>
+#include <unordered_set>
 #include <sstream>
 #include <vector>
 
@@ -19,9 +20,16 @@ public:
 template <typename T>
 class Graph {
 protected:
-    std::unordered_map<T, std::unordered_map<T, double>> _adjacency; // begin, {{end, weight}}
+    std::unordered_map<T, std::unordered_map<T, double>> _adjacency; // begin: {end: weight}
 
-public:
+    public:
+    Graph() {}
+    Graph(std::initializer_list<std::tuple<T, T, double>> edges) {
+        for (auto i : edges) {
+            set_edge(std::get<0>(i), std::get<1>(i), std::get<2>(i));
+        }
+    }
+    Graph(std::unordered_map<T, std::unordered_map<T, double>> initial) : _adjacency(initial) {}
     size_t size() {
         return _adjacency.size();
     }
@@ -77,5 +85,13 @@ public:
         return _adjacency[begin][end];
     }
 };
+
+template <typename T>
+std::ostream& operator<<(std::ostream& os, Graph<T> g) {
+    for (auto i : g.edges()) {
+        os << std::get<0>(i) << "---" << std::get<2>(i) << "-->" << std::get<1>(i) << "\n";
+    }
+    return os;
+}
 
 #endif // GRAPH_HPP
