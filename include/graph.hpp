@@ -6,15 +6,31 @@
 #include <unordered_set>
 #include <sstream>
 #include <vector>
+#include <deque>
 
-class NonexistentNode : public std::range_error {
+
+class NonexistentNode : public std::runtime_error {
 public:
-    NonexistentNode(const auto val) : std::range_error((std::ostringstream() << "Node " << val << " does not exist.").str()) {}
+    NonexistentNode(const auto val) : std::runtime_error((std::ostringstream() << "Node " << val << " does not exist").str()) {}
 };
 
-class NonexistentEdge : public std::range_error {
+class NonexistentEdge : public std::runtime_error {
 public:
-    NonexistentEdge(const auto begin, const auto end) : std::range_error((std::ostringstream() << "The edge from " << begin << " to " << end << " does not exist.").str()) {}
+    NonexistentEdge(const auto begin, const auto end) : std::runtime_error((std::ostringstream() << "The edge from " << begin << " to " << end << " does not exist").str()) {}
+};
+
+class DisconnectedGraph : public std::runtime_error {
+public:
+    DisconnectedGraph() : std::runtime_error("This graph is not fully connected") {}
+};
+
+class Cycle : public std::runtime_error {
+    Cycle() : std::runtime_error("This graph contains a cycle") {}
+};
+
+class NegativeCycle : public std::runtime_error {
+public:
+    NegativeCycle() : std::runtime_error("This graph contains a negative cycle") {}
 };
 
 template <typename T>
@@ -22,14 +38,22 @@ class Graph {
 protected:
     std::unordered_map<T, std::unordered_map<T, double>> _adjacency; // begin: {end: weight}
 
+    // all algorithms need to be friends
+    friend std::vector<std::vector<T>> sssp(Graph<T>& g, T start, bool is_pos = false);
+    friend std::vector<T> shortest_path(Graph<T>& g, T start, T end, bool is_pos = false);
+    friend std::vector<std::vector<T>> all_shortest_paths(Graph<T>& g);
+    friend std::vector<T> top_sort(Graph<T>& g);
+    friend Graph<T> mst(Graph<T>& g);
+    friend std::vector<std::vector<T>> scc(Graph<T>& g);
+
     public:
     Graph() {}
-    Graph(std::initializer_list<std::tuple<T, T, double>> edges) {
+    Graph(std::initializer_list<std::tuple<T, T, double>>& edges) {
         for (auto i : edges) {
             set_edge(std::get<0>(i), std::get<1>(i), std::get<2>(i));
         }
     }
-    Graph(std::unordered_map<T, std::unordered_map<T, double>> initial) : _adjacency(initial) {}
+    Graph(std::unordered_map<T, std::unordered_map<T, double>>& initial) : _adjacency(initial) {}
     size_t size() {
         return _adjacency.size();
     }
@@ -85,49 +109,86 @@ protected:
         return _adjacency[begin][end];
     }
     bool is_dag() {
-
+        try {
+            top_sort(*this);
+            return true;
+        }
+        catch (...) {
+            return false;
+        }
     }
     bool is_undirected() {
-
+        for (auto i : _adjacency) {
+            for (auto j : i.second) {
+                if (!_adjacency[j.first].contains(i.first)) return false;
+            }
+        }
+        return true;
     }
     bool is_positive() {
-
+        for (auto edge : edges()) {
+            if (std::get<2>(edge) < 0) return false;
+        }
+        return true;
     }
     bool is_connected() {
-
+        std::unordered_map<T, bool> visited;
+        for (T node : nodes()) {
+            visited[node] = false;
+            rev_adjacency[node] = {};
+        }
+        std::unordered_map<T, std::unordered_map<T, double>> undirected_adjacency;
+        for (auto i : _adjacency) {
+            for (auto j : i.second) {
+                undirected_adjacency[i.first][j.first] = j.second
+                undirected_adjacency[j.first][i.first] = j.second;
+            }
+        }
+        
+        dfs(undirected_adjacency, visited, visited.begin()->first);
+        for (auto node : visited) {
+            if (!visited.second) return false;
+        }
+        return true;
     }
-    bool has_neg_loop() {
-
+protected:
+    void dfs(std::unordered_map<T, std::unordered_map<T, double>>& adj, std::unordered_map<T, bool>& visited, T curr) {
+        for (auto node : adj[curr]) {
+            if (!visited[node.first]) {
+                visited[node.first] = true;
+                dfs(adj, visited, node.first);
+            }
+        }
     }
 };
 
 template <typename T>
-std::vector<std::vector<T>> sssp(Graph<T> g, T start, bool is_pos = false) {
+std::vector<std::vector<T>> sssp(Graph<T>& g, T start, bool is_pos = false) {
 
 }
 
 template <typename T>
-std::vector<T> shortest_path(Graph<T> g, T start, T end, bool is_pos = false) {
+std::vector<T> shortest_path(Graph<T>& g, T start, T end, bool is_pos = false) {
 
 }
 
 template <typename T>
-std::vector<std::vector<T>> all_shortest_paths(Graph<T> g) {
+std::vector<std::vector<T>> all_shortest_paths(Graph<T>& g) {
 
 }
 
 template <typename T>
-std::vector<T> top_sort(Graph<T> g) {
+std::vector<T> top_sort(Graph<T>& g) {
 
 }
 
 template <typename T>
-Graph<T> mst(Graph<T> g) {
+Graph<T> mst(Graph<T>& g) {
 
 }
 
 template <typename T>
-std::vector<std::vector<T>> scc(Graph<T> g) {
+std::vector<std::vector<T>> scc(Graph<T>& g) {
 
 }
 
