@@ -1,0 +1,69 @@
+# Nest
+A header-only C++ reference library to do DSA right. That means: comprehensive, fast, open, free, permissive, and cross-language integration.
+
+## Full catalog of user-facing headers, classes, and functions; see comments in headers for more info
+
+- graph.hpp
+    - class Graph
+        - nodes
+        - edges
+        - add_node
+        - set_edge
+        - has_node
+        - has_edge
+        - del_node
+        - del_edge
+        - is_dag
+        - is_undirected
+        - is_positive
+        - is_connected
+    - sssp
+    - shortest_path
+    - top_sort
+    - mst
+    - operator<<
+- list.hpp
+    - class List
+        - size
+        - empty
+        - clear
+        - begin
+        - end
+        - back
+        - operator[]
+        - insert
+        - del
+        - find_vals
+        - del_vals
+        - push_front
+        - push_back
+        - pop_front
+        - pop_back
+        - operator==
+        - operator!=
+        - reduce
+        - apply
+    - operator<<
+- search.hpp
+    - namespace search
+        - linear
+        - binary
+        - interpolation
+        - tree
+    - is_sorted
+    - is_bintree
+- sort.hpp
+    - namespace sort
+        - radix
+        - insertion
+        - quick
+        - merge
+- trie.hpp
+    - class Trie
+        - add
+        - contains
+        - all_strings
+- util.hpp
+    - gcf
+    - lcm
+    - kadane

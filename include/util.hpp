@@ -7,8 +7,7 @@
 #include <vector>
 #include <cmath>
 
-// TODO: add min/max
-// TODO: add prefix sum
+
 int gcf(int a, int b) {
     a = std::abs(a); b = std::abs(b);
     int remainder;
