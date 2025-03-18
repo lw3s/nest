@@ -18,7 +18,7 @@ public:
 
 template <typename T>
 class List {
-    size_t _length;
+    int _length;
     ListNode<T>* _begin;
     ListNode<T>* _back;
 
@@ -74,13 +74,13 @@ public:
             pushr(it);
         }
     }
-    List(const T* list, size_t length) : _length(0), _begin(nullptr), _back(nullptr) {
-        for (size_t i = 0; i < length; ++i) {
+    List(const T* list, int length) : _length(0), _begin(nullptr), _back(nullptr) {
+        for (int i = 0; i < length; ++i) {
             pushr(list[i]);
         }
     }
-    List(std::function<T(size_t)> fn, size_t length): _length(0), _begin(nullptr), _back(nullptr) {
-        for (size_t i = 0; i < length; ++i) {
+    List(std::function<T(int)> fn, int length): _length(0), _begin(nullptr), _back(nullptr) {
+        for (int i = 0; i < length; ++i) {
             pushr(fn(i));
         }
     }
@@ -90,8 +90,8 @@ public:
         return (std::ostringstream() << *this).str();
     }
     
-    size_t length() const { return _length; }
-    size_t size() const { return _length; }
+    int length() const { return _length; }
+    int size() const { return _length; }
     bool is_empty() const { return _length == 0; }
     void clear() {
         for (auto* p = _begin; p != nullptr;) {
@@ -116,11 +116,11 @@ public:
         if (!(0 <= pos && pos < _length)) throw ListOutOfBounds();
         if (pos < _length / 2) {
             auto it = begin();
-            for (size_t _ = 0; _ < pos; ++_) ++it;
+            for (int _ = 0; _ < pos; ++_) ++it;
             return it.node()->val;
         } else {
             auto it = back();
-            for (size_t _ = 0; _ < _length - pos - 1; ++_) --it;
+            for (int _ = 0; _ < _length - pos - 1; ++_) --it;
             return it.node()->val;
         }
     }
@@ -172,13 +172,13 @@ public:
     
         if (pos < _length / 2) {
             auto it = begin();
-            for (size_t _ = 0; _ < pos; ++_) {
+            for (int _ = 0; _ < pos; ++_) {
                 ++it;
             }
             delete it.node();
         } else {
             auto it = back();
-            for (size_t _ = 0; _ < _length - pos - 1; ++_) {
+            for (int _ = 0; _ < _length - pos - 1; ++_) {
                 --it;
             }
             delete it.node();
@@ -186,9 +186,9 @@ public:
         end:
         --_length;
     }
-    std::vector<size_t> find_vals(const T val) {
-        std::vector<size_t> its;
-        size_t index = 0;
+    std::vector<int> find_vals(const T val) {
+        std::vector<int> its;
+        int index = 0;
         for (auto it : *this) {
             if (it == val) {
                 its.push_back(index);

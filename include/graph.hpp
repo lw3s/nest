@@ -63,7 +63,7 @@ protected:
         }
     }
     Graph(std::unordered_map<T, std::unordered_map<T, double>>& initial) : _adjacency(initial) {}
-    size_t size() {
+    int size() {
         return _adjacency.size();
     }
     std::vector<T> nodes() { // not recommended to use

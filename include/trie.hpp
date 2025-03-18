@@ -13,7 +13,7 @@ class Trie {
     const int _depth;
 
 public:
-    Trie(size_t depth = 0) : _is_end(false), _depth(depth) {
+    Trie(int depth = 0) : _is_end(false), _depth(depth) {
         for (int i = 0; i < 26; ++i) {
             _subtries[i] = nullptr;
         }
@@ -29,7 +29,7 @@ public:
             return;
         }
         if (_depth == 0) {
-            for (size_t i = 0; i < str.size(); ++i) {
+            for (int i = 0; i < str.size(); ++i) {
                 str[i] = std::tolower(str[i]);
             }
         }
@@ -42,7 +42,7 @@ public:
             return _is_end;
         }
         if (_depth == 0) {
-            for (size_t i = 0; i < str.size(); ++i) {
+            for (int i = 0; i < str.size(); ++i) {
                 str[i] = std::tolower(str[i]);
             }
         }

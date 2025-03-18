@@ -29,7 +29,7 @@ TEST(MiscellaneousTest, Euclidean) {
 
 TEST(MiscellaneousTest, Kadane) {
     std::vector<int> in = {1, -2, 5, -2, 1, 2, -7, 2};
-    std::pair<size_t, size_t> expected = {2, 5};
+    std::pair<int, int> expected = {2, 5};
     EXPECT_EQ(kadane(in), expected);
 }
 

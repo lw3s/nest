@@ -25,12 +25,12 @@ int lcm(int a, int b) {
 }
 
 template <typename T>
-std::pair<size_t, size_t> kadane(std::vector<T> arr) {
+std::pair<int, int> kadane(std::vector<T> arr) {
     if (arr.size() == 0) throw std::range_error("array size needs to be at least 1");
-    std::pair<size_t, size_t> start_end;
-    size_t start = 0;
+    std::pair<int, int> start_end;
+    int start = 0;
     T sum = T(), highest_sum = T();
-    for (size_t i = 0; i < arr.size(); ++i) {
+    for (int i = 0; i < arr.size(); ++i) {
         if (sum <= 0) {
             start = i;
             sum = T();
@@ -45,12 +45,12 @@ std::pair<size_t, size_t> kadane(std::vector<T> arr) {
 }
 
 template <typename T>
-std::pair<size_t, size_t> kadane(T* arr, size_t length) {
+std::pair<int, int> kadane(T* arr, int length) {
     if (length == 0) throw std::range_error("array size needs to be at least 1");
-    std::pair<size_t, size_t> start_end;
-    size_t start = 0;
+    std::pair<int, int> start_end;
+    int start = 0;
     T sum = T(), highest_sum = T();
-    for (size_t i = 0; i < length; ++i) {
+    for (int i = 0; i < length; ++i) {
         if (sum <= 0) {
             start = i;
             sum = T();

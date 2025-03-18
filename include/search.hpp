@@ -7,15 +7,15 @@
 
 namespace search {
 
-size_t linear(std::vector<int> arr, int val) {
-    for (size_t i = 0; i < arr.size(); ++i) {
+int linear(std::vector<int> arr, int val) {
+    for (int i = 0; i < arr.size(); ++i) {
         if (arr[i] == val) return i;
     }
     throw std::range_error("arr does not contain val");
 }
 
-size_t binary(std::vector<int> arr, int val) {
-    size_t l = 0, r = arr.size() - 1, m;
+int binary(std::vector<int> arr, int val) {
+    int l = 0, r = arr.size() - 1, m;
     if (arr[l] == val) return l;
     if (arr[r] == val) return r;
     while (r - l >= 2) {
@@ -28,8 +28,8 @@ size_t binary(std::vector<int> arr, int val) {
     throw std::range_error("arr is unsorted or does not contain val");
 }
 
-size_t tree(std::vector<int> arr, int val) { // see docs
-    size_t pos = 0;
+int tree(std::vector<int> arr, int val) { // see docs
+    int pos = 0;
     while (pos < arr.size()) {
         if (val == arr[pos]) return pos;
         
@@ -39,8 +39,8 @@ size_t tree(std::vector<int> arr, int val) { // see docs
     throw std::range_error("arr is invalid binary search tree or does not contain val");
 }
 
-size_t interpolation(std::vector<int> arr, int val) {
-    size_t l = 0, r = arr.size() - 1, m;
+int interpolation(std::vector<int> arr, int val) {
+    int l = 0, r = arr.size() - 1, m;
     if (arr[l] == val) return l;
     if (arr[r] == val) return r;
     while (r - l >= 2) {
@@ -64,14 +64,14 @@ size_t interpolation(std::vector<int> arr, int val) {
 }
 
 bool is_sorted(std::vector<int> arr) {
-    for (size_t i = 1; i < arr.size(); ++i) {
+    for (int i = 1; i < arr.size(); ++i) {
         if (arr[i-1] > arr[i]) return false;
     }
     return true;
 }
 
-bool is_bintree(std::vector<int> arr, size_t root = 0) {
-    size_t left = root * 2 + 1, right = root * 2 + 2;
+bool is_bintree(std::vector<int> arr, int root = 0) {
+    int left = root * 2 + 1, right = root * 2 + 2;
     if (right < arr.size()) {
         if (arr[right] <= arr[root]) return false;
         if (!is_bintree(arr, right)) return false;
