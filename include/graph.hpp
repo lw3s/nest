@@ -247,7 +247,32 @@ std::pair<double, std::vector<T>> shortest_path(Graph<T>& g, T start, T end) {
 
 template <typename T>
 std::vector<T> top_sort(Graph<T>& g) {
+    std::unordered_map<T, int> in_degree;
+    for (auto edge : g.edges()) {
+        ++in_degree[std::get<1>(edge)];
+    }
+    std::deque<T> zero_in;
+    for (auto node : in_degree) {
+        if (node.second == 0) zero_in.push_back(node.first);
+    }
 
+    T curr;
+    std::vector<T> ordering;
+    std::unordered_set<T> visited;
+    while (!zero_in.size()) {
+        curr = zero_in.front();
+        zero_in.pop_front();
+        ordering.push_back(curr);
+        for (auto edge : g._adjacency[curr]) {
+            --in_degree[edge.first];
+            if (in_degree[edge.first] == 0 && !visited.contains(edge.first)) {
+                zero_in.push_back(edge.first);
+                visited.insert(edge.first);
+            }
+        }
+    }
+    if (ordering.size() != g.size()) throw cycle();
+    return ordering;
 }
 
 template <typename T>
