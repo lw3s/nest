@@ -46,18 +46,16 @@ protected:
     std::unordered_map<T, std::unordered_map<T, double>> _adjacency; // begin: {end: weight}
 
     // all algorithms need to be friends
-    friend std::unordered_map<T, std::pair<double, std::vector<T>>> sssp(Graph<T>& g, T start);
-    friend std::unordered_map<T, std::pair<double, std::vector<T>>> dijkstra(Graph<T>& g, T start);
-    friend std::unordered_map<T, std::pair<double, std::vector<T>>> bellman_ford(Graph<T>& g, T start);
-    friend std::vector<T> shortest_path(Graph<T>& g, T start, T end);
-    friend std::vector<std::vector<T>> all_shortest_paths(Graph<T>& g);
-    friend std::vector<T> top_sort(Graph<T>& g);
-    friend Graph<T> mst(Graph<T>& g);
-    friend std::vector<std::vector<T>> scc(Graph<T>& g);
+    template <typename t> friend std::unordered_map<t, std::pair<double, std::vector<t>>> sssp(Graph<t>& g, t start);
+    template <typename t> friend std::unordered_map<t, std::pair<double, std::vector<t>>> dijkstra(Graph<t>& g, t start);
+    template <typename t> friend std::unordered_map<t, std::pair<double, std::vector<t>>> bellman_ford(Graph<t>& g, t start);
+    template <typename t> friend std::vector<t> shortest_path(Graph<t>& g, t start, t end);
+    template <typename t> friend std::vector<t> top_sort(Graph<t>& g);
+    template <typename t> friend Graph<t> mst(Graph<t>& g);
 
     public:
     Graph() {}
-    Graph(std::initializer_list<std::tuple<T, T, double>>& edges) {
+    Graph(std::initializer_list<std::tuple<T, T, double>> edges) {
         for (auto i : edges) {
             set_edge(std::get<0>(i), std::get<1>(i), std::get<2>(i));
         }
@@ -142,14 +140,14 @@ protected:
     }
     bool is_connected() {
         std::unordered_map<T, bool> visited;
+        std::unordered_map<T, std::unordered_map<T, double>> undirected_adjacency;
         for (T node : nodes()) {
             visited[node] = false;
-            rev_adjacency[node] = {};
+            undirected_adjacency[node] = {};
         }
-        std::unordered_map<T, std::unordered_map<T, double>> undirected_adjacency;
         for (auto i : _adjacency) {
             for (auto j : i.second) {
-                undirected_adjacency[i.first][j.first] = j.second
+                undirected_adjacency[i.first][j.first] = j.second;
                 undirected_adjacency[j.first][i.first] = j.second;
             }
         }
@@ -223,11 +221,11 @@ std::unordered_map<T, std::pair<double, std::vector<T>>> bellman_ford(Graph<T>& 
             }
         }
     }
-    return preds_to_result(predecessors, distances, g.nodes());
+    return preds_to_result(predecessors, distances, g.nodes(), start);
 }
 
 template <typename T>
-std::unordered_map<T, std::pair<double, std::vector<T>>> preds_to_result(auto predecessors, auto distances, std::vector<T> nodes) {
+std::unordered_map<T, std::pair<double, std::vector<T>>> preds_to_result(auto predecessors, auto distances, std::vector<T> nodes, T start) {
     std::unordered_map<T, std::pair<double, std::vector<T>>> result;
     for (const auto& node : nodes) {
         std::vector<T> path;

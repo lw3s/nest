@@ -8,7 +8,7 @@ protected:
 public:
     void SetUp() {
         // represented in graph_image.png
-        g = {
+        g = Graph<int>({
             { 0, 1, 5 },
             { 0, 2, 4 },
             { 1, 2, 6 },
@@ -24,7 +24,7 @@ public:
             { 6, 5, 4 },
             { 7, 6, 8 },
             { 8, 4, 7 }
-        };
+        });
     }
 };
 
