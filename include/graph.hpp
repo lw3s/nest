@@ -312,11 +312,6 @@ void add_edges(T node, std::unordered_map<T, std::unordered_map<T, double>>& adj
 }
 
 template <typename T>
-std::vector<std::vector<T>> scc(Graph<T>& g) {
-
-}
-
-template <typename T>
 std::ostream& operator<<(std::ostream& os, Graph<T> g) {
     for (auto i : g.edges()) {
         os << std::get<0>(i) << "---" << std::get<2>(i) << "-->" << std::get<1>(i) << "\n";
