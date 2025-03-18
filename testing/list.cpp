@@ -30,10 +30,10 @@ TEST_F(LinkedListTest, Indexing) {
 }
 
 TEST_F(LinkedListTest, Edit) { // Lots of moving parts here, I want path coverage.
-    ls.popl();
-    ls.popr();
-    ls.pushl(20);
-    ls.pushr(1);
+    ls.pop_front();
+    ls.pop_back();
+    ls.push_front(20);
+    ls.push_back(1);
     ls.insert(2, 5);
     ls.insert(-17, 23);
     ls.insert(18, 43);

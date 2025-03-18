@@ -90,9 +90,8 @@ public:
         return (std::ostringstream() << *this).str();
     }
     
-    int length() const { return _length; }
     int size() const { return _length; }
-    bool is_empty() const { return _length == 0; }
+    bool empty() const { return _length == 0; }
     void clear() {
         for (auto* p = _begin; p != nullptr;) {
             auto* p_next = p->next();
@@ -225,10 +224,10 @@ public:
         }
     }
     
-    void pushl(const T val) { insert(0, val); }
-    void pushr(const T val) { insert(-1, val); }
-    void popl() { del(0); }
-    void popr() { del(-1); }
+    void push_front(const T val) { insert(0, val); }
+    void push_back(const T val) { insert(-1, val); }
+    void pop_front() { del(0); }
+    void pop_back() { del(-1); }
     
     bool operator==(const List<T> rhs) {
         if (_length != rhs._length) return false;
