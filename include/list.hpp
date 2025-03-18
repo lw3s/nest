@@ -18,6 +18,11 @@ public:
 
 template <typename T>
 class List {
+    /**
+     * class List<T>
+     * 
+     * highly featureful doubly-linked list containing smart pointers to front and back ListNodes
+     */
     int _length;
     ListNode<T>* _begin;
     ListNode<T>* _back;
@@ -25,6 +30,11 @@ class List {
 public:
 
     class iterator {
+        /**
+         * class iterator
+         * 
+         * container class for ListNode allowing easy iteration
+         */
         friend class List;
         ListNode<T>* _node;
     public:
@@ -42,6 +52,11 @@ public:
     };
     
     class const_iterator {
+        /**
+         * class const_iterator
+         * 
+         * container class for ListNode allowing easy iteration
+         */
         friend class List;
         const ListNode<T>* _node;
     public:
@@ -61,38 +76,48 @@ public:
     List() : _length(0), _begin(nullptr), _back(nullptr) {}
     List(const std::initializer_list<T> il): _length(0), _begin(nullptr), _back(nullptr) {
         for (T i : il) {
-            pushr(i);
+            push_back(i);
         }
     }
     List(const List<T>& list) : _length(0), _begin(nullptr), _back(nullptr) {
         for (auto it : list) {
-            pushr(it);
+            push_back(it);
         }
     }
     List(const std::vector<T> list) : _length(0), _begin(nullptr), _back(nullptr) {
         for (auto it : list) {
-            pushr(it);
+            push_back(it);
         }
     }
     List(const T* list, int length) : _length(0), _begin(nullptr), _back(nullptr) {
         for (int i = 0; i < length; ++i) {
-            pushr(list[i]);
+            push_back(list[i]);
         }
     }
     List(std::function<T(int)> fn, int length): _length(0), _begin(nullptr), _back(nullptr) {
         for (int i = 0; i < length; ++i) {
-            pushr(fn(i));
+            push_back(fn(i));
         }
     }
     ~List() { clear(); }
 
     std::string string() {
+        /**
+         * std::string string()
+         * 
+         * return a string just as operator<< creates
+         */
         return (std::ostringstream() << *this).str();
     }
     
     int size() const { return _length; }
     bool empty() const { return _length == 0; }
     void clear() {
+        /**
+         * void clear()
+         * 
+         * safely delete all list nodes without leaks
+         */
         for (auto* p = _begin; p != nullptr;) {
             auto* p_next = p->next();
             delete p;
@@ -111,6 +136,12 @@ public:
     const_iterator back() const { return const_iterator(_back); }
 
     T& operator[](int pos) {
+        /**
+         * T& operator[](int)
+         * 
+         * return a reference to the value at the given index; use sparingly as it takes linear time
+         * if a negative index is given, the length is added, similarly to Python lists, such that you may access the last element with [-1]
+         */
         if (pos < 0) pos += _length;
         if (!(0 <= pos && pos < _length)) throw ListOutOfBounds();
         if (pos < _length / 2) {
@@ -124,6 +155,11 @@ public:
         }
     }
     void insert(int pos, const T val) {
+        /**
+         * void insert(int, T)
+         * 
+         * insert given value into the list such that its new position is the given index
+         */
         if (pos < 0) pos += _length + 1;
         if (!(0 <= pos && pos <= _length)) throw ListOutOfBounds();
         
@@ -155,7 +191,12 @@ public:
         end:
         ++_length;
     }
-    void del(int pos) { 
+    void del(int pos) {
+        /**
+         * void del(int)
+         * 
+         * delete the node at the given position safely, without leaks
+         */
         if (pos < 0) pos += _length;
         if (!(0 <= pos && pos < _length)) throw ListOutOfBounds();
     
@@ -186,6 +227,11 @@ public:
         --_length;
     }
     std::vector<int> find_vals(const T val) {
+        /**
+         * std::vector<int> find_vals(T)
+         * 
+         * return a vector of indecies at which the given given value occurs
+         */
         std::vector<int> its;
         int index = 0;
         for (auto it : *this) {
@@ -197,7 +243,12 @@ public:
         return its;
     }
     void del_vals(const T val) {
-        if (is_empty()) return;
+        /**
+         * void del_vals(T)
+         * 
+         * behave just like find_vals, except delete the values rather than returning them
+         */
+        if (empty()) return;
         while (_begin->val == val && _begin != _back) {
             _begin = _begin->next();
             delete _begin->prev();
@@ -230,6 +281,11 @@ public:
     void pop_back() { del(-1); }
     
     bool operator==(const List<T> rhs) {
+        /**
+         * bool operator==(List<T>)
+         * 
+         * return true if lists have the same length and all the same values, false otherwise
+         */
         if (_length != rhs._length) return false;
         auto l = begin(), r = rhs.begin();
         while (l != nullptr && r != nullptr) {
@@ -239,6 +295,11 @@ public:
         return true;
     }
     bool operator!=(const List<T> rhs) {
+        /**
+         * bool operator!=(List<T>)
+         * 
+         * return false if lists have the same length and all the same values, true otherwise
+         */
         if (_length != rhs._length) return true;
         auto l = begin(), r = rhs.begin();
         while (l != nullptr && r != nullptr) {
@@ -248,12 +309,25 @@ public:
         return false;
     }
     T reduce(const std::function<T(T, T)> fn, T start = T()) {
+        /**
+         * T reduce(std::function<T(T, T)>, T)
+         * 
+         * pass a function or lambda to reduce the list to a single value and return it (the list is unaffected)
+         * e.g. List<int>({ 1, 4, 7 }).reduce([](int lhs, int rhs) -> int { return lhs + rhs; }) == 12
+         * has optional `start` argument e.g. if you want to find the product of a List, you should start with 1, but this would automatically start with 0, so you pass 1
+         */
         for (auto i : *this) {
             start = fn(start, i);
         }
         return start;
     }
     void apply(const std::function<T(T)> fn) {
+        /**
+         * void apply(std::function<T(T)>)
+         * 
+         * pass a function to transform the list
+         * e.g. List<int>({ 1, 4, 7 }).apply([](int n) -> int { return n * n; }) == List<int>({ 1, 16, 49 })
+         */
         for (auto i = begin(); i != nullptr; ++i) {
             i.node()->val = fn(i.node()->val);
         }
@@ -262,8 +336,13 @@ public:
 
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const List<T>& rhs) {
+    /**
+     * std::ostream& operator<<(List<T>)
+     * 
+     * output the list in a form that looks like an initializer list
+     */
     os << "{ ";
-    if (!rhs.is_empty()) {
+    if (!rhs.empty()) {
         for (auto i = rhs.begin(); i != rhs.back(); ++i) {
             os << *i << ", ";
         }

@@ -8,6 +8,11 @@
 #include <utility>
 
 class Trie {
+    /**
+     * class Trie
+     * 
+     * Maintains a 26-jointed tree that can be traversed quickly and store words efficiently
+     */
     Trie* _subtries[26];
     bool _is_end;
     const int _depth;
@@ -24,6 +29,11 @@ public:
         }
     }
     void add(std::string str) {
+        /**
+         * void add(std::string)
+         * 
+         * add a new word to the trie
+         */
         if (_depth == str.size()) {
             _is_end = true;
             return;
@@ -38,6 +48,11 @@ public:
         _subtries[subtrie]->add(str);
     }
     bool contains(std::string str) {
+        /**
+         * bool contains(std::string)
+         * 
+         * check if the trie has the string in it or not
+         */
         if (_depth == str.size()) {
             return _is_end;
         }
@@ -50,7 +65,12 @@ public:
         if (subtrie == nullptr) return false;
         return subtrie->contains(str);
     }
-    std::vector<std::string> all_strings() { // not recommended to use, just there for convenience and client-side debugging
+    std::vector<std::string> all_strings() {
+        /**
+         * std::vector<std::string> all_strings()
+         * 
+         * return a vector of all strings contained in the trie
+         */
         std::vector<std::string> words;
         for (int i = 0; i < 26; ++i) {
             if (_subtries[i] != nullptr) {

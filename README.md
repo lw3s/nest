@@ -24,6 +24,14 @@ A header-only C++ reference library to do DSA right. That means: comprehensive, 
     - operator<<
 - list.hpp
     - class List
+        - class iterator/const_iterator
+            - operator++
+            - operator--
+            - operator*
+            - node
+            - operator==
+            - operator!=
+        - string
         - size
         - empty
         - clear
@@ -44,6 +52,13 @@ A header-only C++ reference library to do DSA right. That means: comprehensive, 
         - reduce
         - apply
     - operator<<
+- list_node.hpp
+    - class ListNode
+        - val (member public variable)
+        - prev
+        - next
+        - insert_left
+        - insert_right
 - search.hpp
     - namespace search
         - linear

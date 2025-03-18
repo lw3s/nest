@@ -42,6 +42,11 @@ public:
 
 template <typename T>
 class Graph {
+    /**
+     * class Graph<T>
+     * 
+     * Adjacency list implementation of graph. All node labels must be unique. T is the type for the node labels. Edge weights are of type double
+     */
 protected:
     std::unordered_map<T, std::unordered_map<T, double>> _adjacency; // begin: {end: weight}
 
@@ -62,9 +67,20 @@ protected:
     }
     Graph(std::unordered_map<T, std::unordered_map<T, double>>& initial) : _adjacency(initial) {}
     int size() {
+        /**
+        * int size()
+        * 
+        * returns number of nodes in graph
+        */
         return _adjacency.size();
     }
-    std::vector<T> nodes() { // not recommended to use
+    std::vector<T> nodes() {
+        /**
+         * std::vector<T> nodes()
+         * 
+         * returns a vector of all nodes in graph
+         */
+
         std::vector<T> nodes;
         for (const auto key_value : _adjacency) {
             nodes.push_back(key_value.first);
@@ -72,6 +88,11 @@ protected:
         return nodes;
     }
     std::vector<std::tuple<T, T, double>> edges() { // not recommended to use
+        /**
+         * std::vector<std::tuple<T, T, double>> edges()
+         * 
+         * returns a vector of all edges in graph, with each edge represented as the tuple { from, to, weight }
+         */
         std::vector<std::tuple<T, T, double>> edges;
         for (const auto begin_ends : _adjacency) {
             for (const auto end_weight : begin_ends.second) {
@@ -81,23 +102,48 @@ protected:
         return edges;
     }
     void add_node(T node) {
+        /**
+         * void add_node(T)
+         * 
+         * Create a new node; if node already exists, clear its outgoing edges
+         */
         _adjacency[node] = {};
     }
     void set_edge(T begin, T end, double weight) {
+        /**
+         * void set_edge(T, T, double)
+         * 
+         * Create a new edge (or reset an old one)
+         */
         if (!_adjacency.contains(begin)) add_node(begin);
         if (!_adjacency.contains(end)) add_node(end);
         _adjacency[begin][end] = weight;
     }
     bool has_node(T node) {
+        /**
+         * bool has_node(T)
+         * 
+         * check if there is a node in the graph with the given label
+         */
         return _adjacency.contains(node);
     }
     bool has_edge(T begin, T end) {
+        /**
+         * bool has_edge(T, T)
+         * 
+         * check if there is an edge from the first node to the second
+         */
         if (_adjacency.contains(begin)) {
             return _adjacency[begin].contains(end);
         }
         return false;
     }
     void del_node(T node) {
+        /**
+         * void del_node(T)
+         * 
+         * if the node exists, delete it
+         */
         if (!_adjacency.contains(node)) return;
         _adjacency.erase(node);
         for (auto i : _adjacency) {
@@ -105,17 +151,32 @@ protected:
         }
     }
     void del_edge(T begin, T end) {
+        /**
+         * void del_edge(T, T)
+         * 
+         * if the edge exists, delete it
+         */
         if (!_adjacency.contains(begin)) return;
         if (!_adjacency[begin].contains(end)) return;
         _adjacency[begin].erase(end);
     }
     double weight(T begin, T end) {
+        /**
+         * double weight(T, T)
+         * 
+         * if the edge exists, return the weight; otherwise, throw nonexistent_node or nonexistent_edge error
+         */
         if (!_adjacency.contains(begin)) throw nonexistent_node(begin);
         if (!_adjacency.contains(end)) throw nonexistent_node(end);
         if (!_adjacency[begin].contains(end)) throw nonexistent_edge(begin, end);
         return _adjacency[begin][end];
     }
     bool is_dag() {
+        /**
+         * bool is_dag()
+         * 
+         * return true if graph is directed and acyclyc, false otherwise
+         */
         try {
             top_sort(*this);
             return true;
@@ -125,6 +186,11 @@ protected:
         }
     }
     bool is_undirected() {
+        /**
+         * bool is_undirected()
+         * 
+         * return true if all edges have an edge going the opposite direction with the same weight, false otherwise
+         */
         for (auto i : _adjacency) {
             for (auto j : i.second) {
                 if (!(_adjacency[j.first].contains(i.first) && _adjacency[j.first][i.first] == j.second)) return false;
@@ -133,12 +199,22 @@ protected:
         return true;
     }
     bool is_positive() {
+        /**
+         * bool is_positive()
+         * 
+         * return true if all edges have a weight >= 0, false otherwise
+         */
         for (auto edge : edges()) {
             if (std::get<2>(edge) < 0) return false;
         }
         return true;
     }
     bool is_connected() {
+        /**
+         * bool is_connected()
+         * 
+         * return false if there are at least 2 "islands" of the graph that do not have any edges crossing between, true otherwise
+         */
         std::unordered_map<T, bool> visited;
         std::unordered_map<T, std::unordered_map<T, double>> undirected_adjacency;
         for (T node : nodes()) {
@@ -171,6 +247,13 @@ protected:
 
 template <typename T>
 std::unordered_map<T, std::pair<double, std::vector<T>>> sssp(Graph<T>& g, T start) {
+    /**
+     * std::unordered_map<T, std::pair<double, std::vector<T>>> ssp(Graph<T>, T start)
+     * 
+     * single-source shortest paths; returns map in the form of    end : {total weights, path}
+     * chooses between bellman-ford and dijkstra for you, so feel free to use either instead, but they are not documented
+     * if any nodes are unreachable, their weights will be infinite, and their vectors will be empty
+     */
     if (g.is_positive()) return dijkstra(g, start);
     else return bellman_ford(g, start);
 }
@@ -245,11 +328,21 @@ std::unordered_map<T, std::pair<double, std::vector<T>>> preds_to_result(auto pr
 
 template <typename T>
 std::pair<double, std::vector<T>> shortest_path(Graph<T>& g, T start, T end) {
+    /**
+     * std::pair<double, std::vector<T>> shortest_path(Graph<T>, T, T)
+     * 
+     * uses sssp function to find the shortest path between 2 nodes
+     */
     return sssp(g, start)[end];
 }
 
 template <typename T>
 std::vector<T> top_sort(Graph<T>& g) {
+    /**
+     * std::vector<T> top_sort(Graph<T>)
+     * 
+     * perform topological sort using Kahn's algorithm; return a vector of one potential ordering of the nodes
+     */
     std::unordered_map<T, int> in_degree;
     for (auto edge : g.edges()) {
         ++in_degree[std::get<1>(edge)];
@@ -280,6 +373,12 @@ std::vector<T> top_sort(Graph<T>& g) {
 
 template <typename T>
 Graph<T> mst(Graph<T>& g) {
+    /**
+     * Graph<T> mst(Graph<T>)
+     * 
+     * use prim's algorithm to find the minimum spanning tree; return a graph of this tree
+     * if graph isn't undirected or connected, this will throw
+     */
     if (!g.is_undirected()) throw directed_graph();
     if (!g.is_connected()) throw disconnected_graph();
 
@@ -311,6 +410,11 @@ void add_edges(T node, std::unordered_map<T, std::unordered_map<T, double>>& adj
 
 template <typename T>
 std::ostream& operator<<(std::ostream& os, Graph<T> g) {
+    /**
+     * std::ostream operator<<(Graph<T>)
+     * 
+     * for debugging purposes; print out edges in form  from---weight-->to
+     */
     for (auto i : g.edges()) {
         os << std::get<0>(i) << "---" << std::get<2>(i) << "-->" << std::get<1>(i) << "\n";
     }

@@ -9,6 +9,11 @@
 
 
 int gcf(int a, int b) {
+    /**
+     * int gcf(int, int)
+     * 
+     * use Euclidean algorithm to return the greatest common factor of 2 integers
+     */
     a = std::abs(a); b = std::abs(b);
     int remainder;
     while (b != 0) {
@@ -20,11 +25,21 @@ int gcf(int a, int b) {
 }
 
 int lcm(int a, int b) {
+    /**
+     * int lcm(int, int)
+     * 
+     * use gcf function above to return least common multiple of 2 integers
+     */
     return a * b / gcf(a, b);
 }
 
 template <typename T>
 std::pair<int, int> kadane(std::vector<T> arr) {
+    /**
+     * std::pair<int, int> kadane(std::vector)
+     * 
+     * implements kadane's algorithm on a vector
+     */
     if (arr.size() == 0) throw std::range_error("array size needs to be at least 1");
     std::pair<int, int> start_end;
     int start = 0;
@@ -45,6 +60,11 @@ std::pair<int, int> kadane(std::vector<T> arr) {
 
 template <typename T>
 std::pair<int, int> kadane(T* arr, int length) {
+    /**
+     * std::pair<int, int> kadane(T*, int)
+     * 
+     * implements kadane's algorithm on a C-style static array, given its length
+     */
     if (length == 0) throw std::range_error("array size needs to be at least 1");
     std::pair<int, int> start_end;
     int start = 0;

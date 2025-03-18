@@ -2,7 +2,6 @@
 
 #include "trie.hpp"
 #include "util.hpp"
-#include "rational.hpp"
 
 TEST(MiscellaneousTest, Trie) {
     Trie t;
