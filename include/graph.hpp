@@ -35,6 +35,11 @@ public:
     negative_cycle() : std::runtime_error("This graph contains a negative cycle") {}
 };
 
+class directed_graph : public std::runtime_error {
+public:
+    directed_graph() : std::runtime_error("This graph is not undirected") {}
+};
+
 template <typename T>
 class Graph {
 protected:
@@ -124,7 +129,7 @@ protected:
     bool is_undirected() {
         for (auto i : _adjacency) {
             for (auto j : i.second) {
-                if (!_adjacency[j.first].contains(i.first)) return false;
+                if (!(_adjacency[j.first].contains(i.first) && _adjacency[j.first][i.first] == j.second)) return false;
             }
         }
         return true;
@@ -277,7 +282,33 @@ std::vector<T> top_sort(Graph<T>& g) {
 
 template <typename T>
 Graph<T> mst(Graph<T>& g) {
+    if (!g.is_undirected()) throw directed_graph();
+    if (!g.is_connected()) throw disconnected_graph();
 
+    Graph<T> mst;
+    std::priority_queue<std::tuple<double, T, T>, std::vector<std::tuple<double, T, T>>, std::greater<std::tuple<double, T, T>>> heap;
+    std::unordered_set<T> visited;
+    add_edges(g._adjacency.begin()->first, g._adjacency, heap, visited);
+
+    while (!heap.empty()) {
+        std::tuple<double, T, T> curr_edge = heap.top();
+        T from = std::get<1>(curr_edge); T to = std::get<2>(curr_edge); double weight = std::get<0>(curr_edge);
+        heap.pop();
+        if (visited.contains(to)) continue;
+        mst.set_edge(from, to, weight);
+        mst.set_edge(to, from, weight);
+        add_edges(to, g._adjacency, heap, visited);
+    }
+    return mst;
+}
+
+template <typename T>
+void add_edges(T node, std::unordered_map<T, std::unordered_map<T, double>>& adj, std::priority_queue<std::tuple<double, T, T>>& heap, std::unordered_set<T>& visited) {
+    for (auto edge : adj[node]) {
+        if (!visited.contains(edge.first)) {
+            heap.push({ edge.second, node, edge.first });
+        }
+    }
 }
 
 template <typename T>
