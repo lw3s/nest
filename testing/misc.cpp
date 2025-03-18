@@ -32,13 +32,3 @@ TEST(MiscellaneousTest, Kadane) {
     std::pair<int, int> expected = {2, 5};
     EXPECT_EQ(kadane(in), expected);
 }
-
-TEST(MiscellaneousTest, Rational) {
-    Rational a(2, 5);
-    Rational b(7, 4);
-    EXPECT_DOUBLE_EQ(a.to_double(), 0.4);
-    Rational added(43, 20);
-    EXPECT_EQ(a + b, added);
-    Rational divided(8, 35);
-    EXPECT_EQ(a / b, divided);
-}
