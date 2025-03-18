@@ -7,30 +7,32 @@
 #include <sstream>
 #include <vector>
 #include <deque>
+#include <queue>
+#include <limits>
 
 
-class NonexistentNode : public std::runtime_error {
+class nonexistent_node : public std::runtime_error {
 public:
-    NonexistentNode(const auto val) : std::runtime_error((std::ostringstream() << "Node " << val << " does not exist").str()) {}
+    nonexistent_node(const auto val) : std::runtime_error((std::ostringstream() << "Node " << val << " does not exist").str()) {}
 };
 
-class NonexistentEdge : public std::runtime_error {
+class nonexistent_edge : public std::runtime_error {
 public:
-    NonexistentEdge(const auto begin, const auto end) : std::runtime_error((std::ostringstream() << "The edge from " << begin << " to " << end << " does not exist").str()) {}
+    nonexistent_edge(const auto begin, const auto end) : std::runtime_error((std::ostringstream() << "The edge from " << begin << " to " << end << " does not exist").str()) {}
 };
 
-class DisconnectedGraph : public std::runtime_error {
+class disconnected_graph : public std::runtime_error {
 public:
-    DisconnectedGraph() : std::runtime_error("This graph is not fully connected") {}
+    disconnected_graph() : std::runtime_error("This graph is not fully connected") {}
 };
 
-class Cycle : public std::runtime_error {
-    Cycle() : std::runtime_error("This graph contains a cycle") {}
+class cycle : public std::runtime_error {
+    cycle() : std::runtime_error("This graph contains a cycle") {}
 };
 
-class NegativeCycle : public std::runtime_error {
+class negative_cycle : public std::runtime_error {
 public:
-    NegativeCycle() : std::runtime_error("This graph contains a negative cycle") {}
+    negative_cycle() : std::runtime_error("This graph contains a negative cycle") {}
 };
 
 template <typename T>
@@ -39,8 +41,10 @@ protected:
     std::unordered_map<T, std::unordered_map<T, double>> _adjacency; // begin: {end: weight}
 
     // all algorithms need to be friends
-    friend std::vector<std::vector<T>> sssp(Graph<T>& g, T start, bool is_pos = false);
-    friend std::vector<T> shortest_path(Graph<T>& g, T start, T end, bool is_pos = false);
+    friend std::unordered_map<T, std::pair<double, std::vector<T>>> sssp(Graph<T>& g, T start);
+    friend std::unordered_map<T, std::pair<double, std::vector<T>>> dijkstra(Graph<T>& g, T start);
+    friend std::unordered_map<T, std::pair<double, std::vector<T>>> bellman_ford(Graph<T>& g, T start);
+    friend std::vector<T> shortest_path(Graph<T>& g, T start, T end);
     friend std::vector<std::vector<T>> all_shortest_paths(Graph<T>& g);
     friend std::vector<T> top_sort(Graph<T>& g);
     friend Graph<T> mst(Graph<T>& g);
@@ -103,9 +107,9 @@ protected:
         _adjacency[begin].erase(end);
     }
     double weight(T begin, T end) {
-        if (!_adjacency.contains(begin)) throw NonexistentNode(begin);
-        if (!_adjacency.contains(end)) throw NonexistentNode(end);
-        if (!_adjacency[begin].contains(end)) throw NonexistentEdge(begin, end);
+        if (!_adjacency.contains(begin)) throw nonexistent_node(begin);
+        if (!_adjacency.contains(end)) throw nonexistent_node(end);
+        if (!_adjacency[begin].contains(end)) throw nonexistent_edge(begin, end);
         return _adjacency[begin][end];
     }
     bool is_dag() {
@@ -163,18 +167,82 @@ protected:
 };
 
 template <typename T>
-std::vector<std::vector<T>> sssp(Graph<T>& g, T start, bool is_pos = false) {
-
+std::unordered_map<T, std::pair<double, std::vector<T>>> sssp(Graph<T>& g, T start) {
+    if (g.is_positive()) return dijkstra(g, start);
+    else return bellman_ford(g, start);
 }
 
 template <typename T>
-std::vector<T> shortest_path(Graph<T>& g, T start, T end, bool is_pos = false) {
-
+std::unordered_map<T, std::pair<double, std::vector<T>>> dijkstra(Graph<T>& g, T start) {
+    std::priority_queue<std::pair<double, T>, std::vector<std::pair<double, T>>, std::greater<std::pair<double, T>>> heap;
+    std::unordered_map<T, double> distances;
+    std::unordered_map<T, T> predecessors;
+    for (T node : g.nodes()) {
+        distances[node] = std::numeric_limits<double>::infinity();
+    }
+    distances[start] = 0;
+    heap.push(std::make_pair(0, start));
+    
+    while (!heap.empty()) {
+        T top = heap.top().second;
+        heap.pop();
+        for (auto node : g._adjacency[top]) {
+            double new_dist = distances[top] + node.second;
+            if (new_dist < distances[node.first]) {
+                distances[node.first] = new_dist;
+                heap.push(std::make_pair(new_dist, node.first));
+                predecessors[node.first] = top;
+            }
+        }
+    }
+    preds_to_result(predecessors, distances, g.nodes());
 }
 
 template <typename T>
-std::vector<std::vector<T>> all_shortest_paths(Graph<T>& g) {
+std::unordered_map<T, std::pair<double, std::vector<T>>> bellman_ford(Graph<T>& g, T start) {
+    std::unordered_map<T, double> distances;
+    std::unordered_map<T, T> predecessors;
+    for (T node : g.nodes()) {
+        distances[node] = std::numeric_limits<double>::infinity();
+    }
+    distances[start] = 0;
 
+    for (int i = 0; i < g.size(); ++i) {
+        for (auto edge : g.edges()) {
+            T end = std::get<1>(edge);
+            double new_weight = distances[std::get<0>(edge)] + std::get<2>(edge);
+            if (new_weight < distances[end]) {
+                distances[end] = new_weight;
+                predecessors[end] = std::get<0>(edge);
+                if (i == g.size() - 1) throw negative_cycle();
+            }
+        }
+    }
+    return preds_to_result(predecessors, distances, g.nodes());
+}
+
+template <typename T>
+std::unordered_map<T, std::pair<double, std::vector<T>>> preds_to_result(auto predecessors, auto distances, std::vector<T> nodes) {
+    std::unordered_map<T, std::pair<double, std::vector<T>>> result;
+    for (const auto& node : nodes) {
+        std::vector<T> path;
+        if (distances[node] == std::numeric_limits<double>::infinity()) {
+            result[node] = {distances[node], path};  
+            continue;
+        }
+        for (T at = node; at != start; at = predecessors[at]) {
+            path.push_back(at);
+        }
+        path.push_back(start);
+        std::reverse(path.begin(), path.end());
+        result[node] = {distances[node], path};
+    }
+    return result;
+}
+
+template <typename T>
+std::pair<double, std::vector<T>> shortest_path(Graph<T>& g, T start, T end) {
+    return sssp(g, start)[end];
 }
 
 template <typename T>

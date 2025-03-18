@@ -31,9 +31,9 @@ public:
 TEST_F(GraphTest, InsertionAndDeletion) {
     Graph <int> g;
     g.add_node(1);
-    EXPECT_THROW(g.weight(1, 2);, NonexistentNode);
+    EXPECT_THROW(g.weight(1, 2);, nonexistent_node);
     g.add_node(2);
-    EXPECT_THROW(g.weight(1, 2);, NonexistentEdge);
+    EXPECT_THROW(g.weight(1, 2);, nonexistent_edge);
     g.set_edge(1, 2, 5);
     EXPECT_DOUBLE_EQ(g.weight(1, 2), 5);
     g.set_edge(3, 4, 27.4); // shouldn't throw anything
